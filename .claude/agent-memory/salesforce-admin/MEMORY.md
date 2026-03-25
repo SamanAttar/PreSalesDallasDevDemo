@@ -1,0 +1,1 @@
+- [Org Configuration Patterns](project_org_patterns.md) — Field metadata conventions, layout patterns, Admin profile FLS structure, and custom fields in use on Opportunity/Account

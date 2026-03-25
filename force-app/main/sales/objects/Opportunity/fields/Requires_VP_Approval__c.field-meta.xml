@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requires_VP_Approval__c</fullName>
+    <label>Requires VP Approval</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+    <description>Auto-set when Amount exceeds $100K or Discount exceeds 20%.</description>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+</CustomField>
