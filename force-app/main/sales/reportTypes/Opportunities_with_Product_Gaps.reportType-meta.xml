@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Opportunities with Product Gaps</label>
+    <description>Report type spanning Opportunities, Opportunity Gaps, and Product Gaps for pipeline gap analysis</description>
+    <baseObject>Opportunity</baseObject>
+    <category>sales</category>
+    <deployed>true</deployed>
+    <joins>
+        <outerJoin>true</outerJoin>
+        <relationship>OpportunityGaps</relationship>
+        <joins>
+            <outerJoin>true</outerJoin>
+            <relationship>ProductGap__r</relationship>
+        </joins>
+    </joins>
+</ReportType>

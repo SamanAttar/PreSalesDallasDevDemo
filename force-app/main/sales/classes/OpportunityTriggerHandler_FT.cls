@@ -139,6 +139,31 @@ private class OpportunityTriggerHandler_FT {
     // ── Full Chain: Opp → Account Pipeline → Account Tier ──
 
     @IsTest
+    static void testAmountChangePropagatestoGaps() {
+        Account acct = getTestAccount();
+        Opportunity opp = createOpp(acct.Id, 'Prospecting', 50000, Date.today().addDays(30));
+        insert opp;
+
+        ProductGap__c gap = new ProductGap__c(Name = 'FT Gap', Status__c = 'New', Category__c = 'Reporting');
+        insert gap;
+
+        OpportunityGap__c oppGap = new OpportunityGap__c(ProductGap__c = gap.Id, Opportunity__c = opp.Id);
+        insert oppGap;
+
+        // Verify initial amount was copied
+        oppGap = [SELECT Amount__c FROM OpportunityGap__c WHERE Id = :oppGap.Id];
+        Assert.areEqual(50000, oppGap.Amount__c, 'Amount__c should be copied from Opportunity on insert');
+
+        // Update the opportunity amount
+        opp.Amount = 99000;
+        update opp;
+
+        // Verify the gap amount was updated
+        oppGap = [SELECT Amount__c FROM OpportunityGap__c WHERE Id = :oppGap.Id];
+        Assert.areEqual(99000, oppGap.Amount__c, 'Amount__c should be updated when linked Opportunity Amount changes');
+    }
+
+    @IsTest
     static void testFullChainOpportunityToAccountTier() {
         Account acct = getTestAccount();
 

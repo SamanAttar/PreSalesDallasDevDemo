@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ProductGap__c</fullName>
+    <label>Product Gap</label>
+    <type>MasterDetail</type>
+    <referenceTo>ProductGap__c</referenceTo>
+    <relationshipLabel>Opportunity Gaps</relationshipLabel>
+    <relationshipName>OpportunityGaps</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <required>true</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+</CustomField>

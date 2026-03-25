@@ -106,6 +106,17 @@
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
+    <quickActionList>
+        <quickActionListItems>
+            <quickActionName>productGapQuickAction</quickActionName>
+        </quickActionListItems>
+    </quickActionList>
+    <relatedLists>
+        <fields>FULL_NAME</fields>
+        <fields>OpportunityGap__c.ProductGap__c</fields>
+        <fields>OpportunityGap__c.Amount__c</fields>
+        <relatedList>OpportunityGap__r</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>

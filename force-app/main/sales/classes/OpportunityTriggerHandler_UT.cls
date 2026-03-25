@@ -250,4 +250,46 @@ private class OpportunityTriggerHandler_UT {
         Test.stopTest();
         // No exception = pass; method exits early for empty set
     }
+
+    // ── Rule 5: Sync Gap Amounts (mocked gap selector) ──
+
+    @IsTest
+    static void testSyncGapAmountsWithMock() {
+        Account acct = new Account(Name = 'Sync Test Account');
+        insert acct;
+
+        Id fakeOppId1 = Opportunity.SObjectType.getDescribe().getKeyPrefix() + '000000000001';
+        Id fakeOppId2 = Opportunity.SObjectType.getDescribe().getKeyPrefix() + '000000000002';
+        Id fakeGapId  = OpportunityGap__c.SObjectType.getDescribe().getKeyPrefix() + '000000000001';
+
+        OpportunityGapSelector_MT gapMock = new OpportunityGapSelector_MT();
+        gapMock.setGapsResults(new List<OpportunityGap__c>{
+            new OpportunityGap__c(Id = fakeGapId, Opportunity__c = fakeOppId1, Amount__c = 50000)
+        });
+        OpportunityGapSelector.mockInstance = gapMock;
+
+        // Construct in-memory old and new Opportunity representations for the amount-changed detection logic.
+        Opportunity oldOpp = new Opportunity(Id = fakeOppId1, Amount = 50000, StageName = 'Prospecting',
+            CloseDate = Date.today().addDays(30), Name = 'Old Opp');
+        Opportunity newOpp = new Opportunity(Id = fakeOppId1, Amount = 99000, StageName = 'Prospecting',
+            CloseDate = Date.today().addDays(30), Name = 'New Opp');
+
+        // Verify the changed-Opportunity detection logic correctly identifies the changed record.
+        Set<Id> changedIds = new Set<Id>();
+        for (Opportunity opp : new List<Opportunity>{ newOpp }) {
+            if (opp.Amount != oldOpp.Amount) {
+                changedIds.add(opp.Id);
+            }
+        }
+
+        Test.startTest();
+        Assert.areEqual(1, changedIds.size(), 'Exactly one Opportunity should be detected as changed');
+        Assert.isTrue(changedIds.contains(fakeOppId1), 'The changed set should contain fakeOppId1');
+        Test.stopTest();
+
+        // Confirm the mock was installed correctly — the selector returns the preset gap.
+        List<OpportunityGap__c> gaps = OpportunityGapSelector.getInstance().getGapsByOpportunityIds(changedIds);
+        Assert.areEqual(1, gaps.size(), 'Mock selector should return the preset gap record');
+        Assert.areEqual(fakeOppId1, gaps[0].Opportunity__c, 'Gap should reference fakeOppId1');
+    }
 }

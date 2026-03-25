@@ -4,17 +4,24 @@
         <members>AccountTriggerHandler</members>
         <members>AccountTriggerHandler_FT</members>
         <members>AccountTriggerHandler_UT</members>
+        <members>OpportunityGapSelector</members>
+        <members>OpportunityGapSelector_MT</members>
+        <members>OpportunityGapTriggerHandler</members>
+        <members>OpportunityGapTriggerHandler_FT</members>
+        <members>OpportunityGapTriggerHandler_UT</members>
         <members>OpportunitySelector</members>
         <members>OpportunitySelector_MT</members>
         <members>OpportunityTriggerHandler</members>
         <members>OpportunityTriggerHandler_FT</members>
         <members>OpportunityTriggerHandler_UT</members>
+        <members>ProductGapQuickActionController</members>
         <members>TriggerHandler</members>
         <members>TriggerHandler_Test</members>
         <name>ApexClass</name>
     </types>
     <types>
         <members>AccountTrigger</members>
+        <members>OpportunityGapTrigger</members>
         <members>OpportunityTrigger</members>
         <name>ApexTrigger</name>
     </types>
@@ -27,12 +34,37 @@
         <members>Opportunity.Discount_Percent__c</members>
         <members>Opportunity.Requires_VP_Approval__c</members>
         <members>Opportunity.Risk_Flag__c</members>
+        <members>OpportunityGap__c.Amount__c</members>
+        <members>OpportunityGap__c.Opportunity__c</members>
+        <members>OpportunityGap__c.ProductGap__c</members>
+        <members>ProductGap__c.Category__c</members>
+        <members>ProductGap__c.Description__c</members>
+        <members>ProductGap__c.Opportunity_Count__c</members>
+        <members>ProductGap__c.Status__c</members>
+        <members>ProductGap__c.Total_Opportunity_Amount__c</members>
         <name>CustomField</name>
+    </types>
+    <types>
+        <members>OpportunityGap__c</members>
+        <members>ProductGap__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Opportunities_with_Product_Gaps</members>
+        <name>CustomReportType</name>
     </types>
     <types>
         <members>Account-Account Layout</members>
         <members>Opportunity-Opportunity Layout</members>
         <name>Layout</name>
+    </types>
+    <types>
+        <members>productGapQuickAction</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Solution_Engineers</members>
+        <name>PermissionSet</name>
     </types>
     <types>
         <members>Admin</members>

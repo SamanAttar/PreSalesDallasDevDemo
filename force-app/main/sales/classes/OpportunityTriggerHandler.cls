@@ -20,6 +20,7 @@ public class OpportunityTriggerHandler extends TriggerHandler {
 
     public override void afterUpdate() {
         rollUpAccountPipeline();
+        syncGapAmounts((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
     }
 
     public override void afterDelete() {
@@ -78,6 +79,33 @@ public class OpportunityTriggerHandler extends TriggerHandler {
                 && opp.CloseDate > oldOpp.CloseDate.addDays(30);
 
             opp.Risk_Flag__c = isPastDue || pushedOut;
+        }
+    }
+
+    // Rule 5: Propagate Opportunity Amount changes to linked OpportunityGap__c records
+    @TestVisible
+    private void syncGapAmounts(List<Opportunity> newOpps, Map<Id, Opportunity> oldMap) {
+        Set<Id> changedOppIds = new Set<Id>();
+        Map<Id, Decimal> newAmountByOppId = new Map<Id, Decimal>();
+        for (Opportunity opp : newOpps) {
+            if (opp.Amount != oldMap.get(opp.Id).Amount) {
+                changedOppIds.add(opp.Id);
+                newAmountByOppId.put(opp.Id, opp.Amount);
+            }
+        }
+        if (changedOppIds.isEmpty()) {
+            return;
+        }
+
+        List<OpportunityGap__c> gapsToUpdate = new List<OpportunityGap__c>();
+        for (OpportunityGap__c gap : OpportunityGapSelector.getInstance().getGapsByOpportunityIds(changedOppIds)) {
+            gapsToUpdate.add(new OpportunityGap__c(
+                Id = gap.Id,
+                Amount__c = newAmountByOppId.get(gap.Opportunity__c)
+            ));
+        }
+        if (!gapsToUpdate.isEmpty()) {
+            update gapsToUpdate;
         }
     }
 

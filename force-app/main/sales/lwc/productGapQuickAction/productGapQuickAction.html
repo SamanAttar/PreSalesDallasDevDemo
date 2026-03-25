@@ -1,0 +1,96 @@
+<template>
+    <lightning-card title="Product Gap" icon-name="standard:gap_detection">
+        <!-- Mode Toggle -->
+        <div class="slds-m-around_medium">
+            <lightning-radio-group
+                name="mode"
+                label="Mode"
+                options={modeOptions}
+                value={selectedMode}
+                type="button"
+                onchange={handleModeChange}
+            ></lightning-radio-group>
+        </div>
+
+        <!-- CREATE MODE -->
+        <template if:true={isCreateMode}>
+            <div class="slds-m-around_medium">
+                <lightning-input
+                    label="Gap Name"
+                    value={gapName}
+                    onchange={handleNameChange}
+                    required
+                ></lightning-input>
+                <lightning-textarea
+                    label="Description"
+                    value={gapDescription}
+                    onchange={handleDescriptionChange}
+                ></lightning-textarea>
+                <lightning-combobox
+                    label="Category"
+                    value={gapCategory}
+                    options={categoryOptions}
+                    onchange={handleCategoryChange}
+                    required
+                ></lightning-combobox>
+                <lightning-combobox
+                    label="Status"
+                    value={gapStatus}
+                    options={statusOptions}
+                    onchange={handleStatusChange}
+                    required
+                ></lightning-combobox>
+            </div>
+        </template>
+
+        <!-- LINK MODE -->
+        <template if:false={isCreateMode}>
+            <div class="slds-m-around_medium">
+                <lightning-input
+                    label="Search Product Gaps"
+                    value={searchTerm}
+                    onchange={handleSearchChange}
+                    placeholder="Type to search..."
+                ></lightning-input>
+                <template if:true={searchResults.length}>
+                    <lightning-list-view-grid></lightning-list-view-grid>
+                    <!-- Results list -->
+                    <ul class="slds-has-dividers_around-space">
+                        <template for:each={searchResults} for:item="gap">
+                            <li key={gap.Id} class="slds-item">
+                                <a onclick={handleSelectGap} data-id={gap.Id} data-name={gap.Name}>
+                                    <strong>{gap.Name}</strong> — {gap.Category__c} ({gap.Status__c})
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+                <template if:true={selectedGapName}>
+                    <p class="slds-m-top_small slds-text-color_success">
+                        Selected: <strong>{selectedGapName}</strong>
+                    </p>
+                </template>
+            </div>
+        </template>
+
+        <!-- Error -->
+        <template if:true={errorMessage}>
+            <p class="slds-m-around_medium slds-text-color_error">{errorMessage}</p>
+        </template>
+
+        <!-- Footer Buttons -->
+        <div slot="footer">
+            <lightning-button
+                label="Cancel"
+                onclick={handleCancel}
+                class="slds-m-right_small"
+            ></lightning-button>
+            <lightning-button
+                variant="brand"
+                label="Save"
+                onclick={handleSave}
+                disabled={isSaving}
+            ></lightning-button>
+        </div>
+    </lightning-card>
+</template>
